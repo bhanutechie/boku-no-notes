@@ -10,10 +10,10 @@ class NoteDao {
      val mDB=FirebaseFirestore.getInstance()
      val noteCollection=mDB.collection("notes")
      val mAuth=FirebaseAuth.getInstance()
-    fun addNote(title:String, note:String) {
+    fun addNote(title : String, note : String, location : String?) {
         GlobalScope.launch {
             val createdAt=System.currentTimeMillis()
-            val note= Note(title,note,createdAt, mAuth.currentUser?.uid.toString())
+            val note= Note(title,note,createdAt, mAuth.currentUser?.uid.toString(),location)
             noteCollection.document().set(note)
         }
     }

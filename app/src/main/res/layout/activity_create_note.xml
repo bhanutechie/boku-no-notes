@@ -15,10 +15,25 @@
         android:layout_marginRight="10dp"
         android:gravity="clip_vertical"
         android:hint="Title"
+        android:maxLength="30"
+        android:inputType="text"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:gravity="clip_vertical"
+        android:hint="Location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNote" />
 
     <EditText
         android:id="@+id/etNote"
@@ -30,7 +45,6 @@
         android:gravity="clip_vertical"
         android:hint="Note something..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTitle" />
 
@@ -38,11 +52,35 @@
         android:id="@+id/btnAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="60dp"
         android:layout_marginRight="10dp"
+        android:text="ADD"
         app:layout_constraintEnd_toEndOf="@+id/etNote"
         app:layout_constraintStart_toStartOf="@+id/etNote"
-        app:layout_constraintTop_toBottomOf="@+id/etNote" />
+        app:layout_constraintTop_toBottomOf="@+id/etLocation" />
+
+    <ImageView
+        android:id="@+id/ivFindLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etLocation"
+        app:srcCompat="@drawable/share_location" />
+
+    <TextView
+        android:id="@+id/tvDetectLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="Find my location"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/ivFindLocation"
+        app:layout_constraintStart_toEndOf="@+id/ivFindLocation"
+        app:layout_constraintTop_toTopOf="@+id/ivFindLocation" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,7 @@
 package com.bokuno.notes
 
+import android.opengl.Visibility
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,7 @@ class NoteAdapter(private val item: ArrayList<Note>): RecyclerView.Adapter<NoteA
         val noteText: TextView = itemView.findViewById(R.id.tvNote)
         val titleText: TextView = itemView.findViewById(R.id.tvTitle)
         val createdAt: TextView = itemView.findViewById(R.id.tvCreatedAt)
+        val location: TextView = itemView.findViewById(R.id.tvLocation)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -33,6 +36,10 @@ class NoteAdapter(private val item: ArrayList<Note>): RecyclerView.Adapter<NoteA
         val formatter = SimpleDateFormat("dd-MM-yyyy 'at' HH:mm")
         val createdAt = formatter.format(model.createdAt)
         holder.createdAt.text=createdAt
+        if(model.location == null){
+            holder.location.visibility=View.GONE
+        }
+        holder.location.text=model.location
     }
 
     override fun getItemCount(): Int {

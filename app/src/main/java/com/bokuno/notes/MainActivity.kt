@@ -2,22 +2,30 @@ package com.bokuno.notes
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bokuno.notes.daos.NoteDao
 import com.bokuno.notes.databinding.ActivityMainBinding
 import com.bokuno.notes.models.Note
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener, SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var mAdapter:NoteAdapter
     private lateinit var binding: ActivityMainBinding
@@ -38,7 +46,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener, Search
 
     override fun onStart() {
         super.onStart()
-        FirebaseAuth.getInstance().addAuthStateListener(this)
+        setUpRecyclerView()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -48,6 +56,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener, Search
             .whereEqualTo("userId",mNoteDao.mAuth.currentUser?.uid)
             .orderBy("createdAt",Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, e ->
+                noteList.clear()
                 if (e != null) {
                     Log.w(TAG, "listen:error", e)
                     return@addSnapshotListener
@@ -57,11 +66,11 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener, Search
                     val note=dc.document.toObject<Note>()
                     if (dc.type == DocumentChange.Type.ADDED) {
                         noteList.add(note)
-                        Log.d(TAG, "Note added: ${note.title}")
+                        Log.i(TAG,"${note.title}")
+
                     }
                     if(dc.type == DocumentChange.Type.REMOVED) {
                         noteList.remove(note)
-                        Log.d(TAG, "Note removed: ${note.title}")
                     }
                 }
                 mAdapter.notifyDataSetChanged()
@@ -71,17 +80,8 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener, Search
         binding.recyclerView.layoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
     }
 
-    override fun onAuthStateChanged(fAuth: FirebaseAuth) {
-        if(fAuth.currentUser==null){
-            val lIntent=Intent(this,LoginActivity::class.java)
-            startActivity(lIntent)
-            return
-        }
-        setUpRecyclerView()
-    }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-
         return true
     }
 
